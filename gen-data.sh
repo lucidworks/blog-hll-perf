@@ -1,9 +1,9 @@
 #!/bin/bash -x
 
-# TODO: bigger numbers
-NUM_DOCS=10000
-RANGE_MULT=50
-MAX_RANGE=1000
+
+NUM_DOCS=10000000
+RANGE_MULT=1000
+MAX_RANGE=500000
 
 mkdir -p input
 

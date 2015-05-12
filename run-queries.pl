@@ -29,7 +29,7 @@ my $params = {
 };
 $uri->query_form($params);
 
-get($uri) || die "warming query failed";
+get($uri) || die "warming query failed: $uri";
 
 for (<stdin>) {
     chomp;
@@ -41,6 +41,8 @@ for (<stdin>) {
     my $timer_start = [gettimeofday];
     my $rawdata = get($uri);
     my $timer_end = [gettimeofday];
+    
+    die "FAILED: $uri" unless defined $rawdata;
 
     my $data = decode_json($rawdata);
 

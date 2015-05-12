@@ -1,0 +1,63 @@
+
+############################ INITIAL SETUP ##################################
+
+### generate a lot of data...
+
+hossman@tray:~/lucid/blog-hll-perf [master] $ ./gen-data.sh 
++ NUM_DOCS=10000000
++ RANGE_MULT=1000
++ MAX_RANGE=500000
++ mkdir -p input
++ perl gen-docs.pl 10000000
++ shuf input/sorted_docs.csv
++ perl gen-queries.pl 10000000 1000 500000
+
+### start up solr cluster
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr -e cloud -noprompt
+...
+
+### index all the docs
+
+hossman@tray:~/lucid/blog-hll-perf [master] $ ./index-docs.sh 
+...
+
+
+### shutdown both solr nodes...
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr stop -all
+...
+
+
+###################### LONG FIELD ##################################
+
+####### In all of the cases below, we restart & stop solr the same way after each test...
+
+### (re-)startup both nodes
+
+# NOTE using more ram then the simple defaults
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr restart -m 2g -c -p 8983 -s example/cloud/node1/solr && bin/solr restart -m 2g -c -p 7574 -z localhost:9983 -s example/cloud/node2/solr
+...
+
+### shutdown both solr nodes...
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr stop -all
+...
+
+### cardinality=true
+
+./do-3-runs.sh '{!key=k cardinality=true}long_data_ls' long_cardinality=true
+
+### cardinality=0.5
+
+./do-3-runs.sh '{!key=k cardinality=0.5}long_data_ls' long_cardinality=5
+
+### cardinality=0.7
+
+./do-3-runs.sh '{!key=k cardinality=0.7}long_data_ls' long_cardinality=7
+
+### countDistinct=true
+
+./do-3-runs.sh '{!key=k countDistinct=true}long_data_ls' long_countdistinct
+
