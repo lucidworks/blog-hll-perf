@@ -61,3 +61,34 @@ hossman@tray:~/lucene/5x_dev/solr$ bin/solr stop -all
 
 ./do-3-runs.sh '{!key=k countDistinct=true}long_data_ls' long_countdistinct
 
+###################### STRING FIELD ##################################
+
+####### In all of the cases below, we restart & stop solr the same way as with the long field...
+
+### (re-)startup both nodes
+
+# NOTE using more ram then the simple defaults
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr restart -m 2g -c -p 8983 -s example/cloud/node1/solr && bin/solr restart -m 2g -c -p 7574 -z localhost:9983 -s example/cloud/node2/solr
+...
+
+### shutdown both solr nodes...
+
+hossman@tray:~/lucene/5x_dev/solr$ bin/solr stop -all
+...
+
+### cardinality=true
+
+./do-3-runs.sh '{!key=k cardinality=true}string_data_ss' string_cardinality=true
+
+### cardinality=0.5
+
+./do-3-runs.sh '{!key=k cardinality=0.5}string_data_ss' string_cardinality=5
+
+### cardinality=0.7
+
+./do-3-runs.sh '{!key=k cardinality=0.7}string_data_ss' string_cardinality=7
+
+### countDistinct=true
+
+./do-3-runs.sh '{!key=k countDistinct=true}string_data_ss' string_countdistinct
