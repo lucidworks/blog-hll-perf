@@ -47,9 +47,6 @@ plot datafile(fieldtype."_countdistinct") using (x3($1)):(relerr(x3($1), $2)) ti
 
 ### plot the the timing data
 
-# crop some of the really noisy data (not enough warming in particular) so detail is more clear
-set yrange [0:2]
-
 set output 'output/'.fieldtype.'_timing.png'
 
 set xlabel "Num Values Expected (# Docs * 3)"
@@ -61,3 +58,11 @@ plot datafile(fieldtype."_countdistinct") using (x3($1)):3:4 with errorbars titl
      datafile(fieldtype."_cardinality=7") using (x3($1)):3:4 with errorbars title "cardinality=0.7" ls 2, \
      datafile(fieldtype."_cardinality=5") using (x3($1)):3:4 with errorbars title "cardinality=0.5" ls 3, \
      datafile(fieldtype."_cardinality=true") using (x3($1)):3:4 with errorbars title "cardinality=true (0.3)" ls 4
+
+# crop some of the really noisy data so detail is more clear
+set xrange [20000:]
+set yrange [0:4]
+set output 'output/'.fieldtype.'_timing_cropped.png'
+
+set title "Request Time (".fieldtype." field, cropped)" noenhanced
+replot
