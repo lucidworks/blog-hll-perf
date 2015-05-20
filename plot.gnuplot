@@ -50,7 +50,7 @@ plot datafile(fieldtype."_countdistinct") using (x3($1)):(relerr(x3($1), $2)) ti
 set output 'output/'.fieldtype.'_timing.png'
 
 set xlabel "Num Values Expected (# Docs * 3)"
-set ylabel "Req Time (sec)"
+set ylabel "Mean Req Time (sec) w/stddev error bars"
 
 set title "Request Time (".fieldtype." field)" noenhanced
 
